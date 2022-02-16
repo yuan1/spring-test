@@ -53,7 +53,18 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("demo")
+    @GetMapping("api")
+    @ResponseBody
+    public Object api(@RequestParam String message) {
+        log.info("api {} {}", message, DateUtil.getTodayToSecond());
+        Map<String, Object> map = this.getServerInfo();
+        map.put("message", message);
+        return map;
+    }
+
+
+
+    @GetMapping("api/demo")
     public String demo(Model model) {
         RestTemplate restTemplate = new RestTemplate();
         Map<String, Object> result = restTemplate.getForObject("http://spring-demo:8082/api?message=fromTest", Map.class);
@@ -63,14 +74,5 @@ public class MainController {
         }
         log.info("demo {}", model.asMap());
         return "demo";
-    }
-
-    @GetMapping("api")
-    @ResponseBody
-    public Object api(@RequestParam String message) {
-        log.info("api {} {}", message, DateUtil.getTodayToSecond());
-        Map<String, Object> map = this.getServerInfo();
-        map.put("message", message);
-        return map;
     }
 }
